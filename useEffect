@@ -1,0 +1,68 @@
+//useEffect
+1, cập nhật lại state
+2, cập nhật lại DOM (mutated)
+3, Render lại UI
+4, gọi cleanup nếu deps thay đổi
+5, gọi useEffect callback
+
+
+
+import React, { useEffect, useState } from 'react';
+
+
+//Runs on every render
+
+function ExampleComponent() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    console.log('useEffect is running on every render');
+
+    // Imagine more complex logic here, which will run on every render.
+    // For example, you might call an API, update some state, or perform other computations.
+  });
+
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount((prevCount) => prevCount + 1)}>Increment</button>
+    </div>
+  );
+}
+
+
+//Runs only on the first render
+
+function Timer() {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setCount((count) => count + 1);
+    }, 1000);
+  }, []); // <- add empty brackets here
+
+  return <h1>I've rendered {count} times!</h1>;
+}
+
+
+  //Runs on the first render
+  //And any time any dependency value changes
+
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  const [calculation, setCalculation] = useState(0);
+
+  useEffect(() => {
+    setCalculation(() => count * 2);
+  }, [count]); // <- add the count variable here
+
+  return (
+    <>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount((c) => c + 1)}>+</button>
+      <p>Calculation: {calculation}</p>
+    </>
+  );
+}
