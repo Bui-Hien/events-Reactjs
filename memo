@@ -1,0 +1,38 @@
+// nếu các thành phần con của memo thay đổi thì mome mới render lại UI
+
+import React, { useState, memo } from 'react';
+
+const ListItem = memo(({ item }) => {
+  console.log(`Rendering item: ${item}`);
+  return <li>{item}</li>;
+});
+
+const List = ({ items }) => {
+  return (
+    <ul>
+      {items.map((item) => (
+        <ListItem key={item} item={item} />
+      ))}
+    </ul>
+  );
+};
+
+const App = () => {
+  const [listItems, setListItems] = useState(['Apple', 'Banana', 'Cherry']);
+
+  const addItem = () => {
+    const newItem = prompt('Enter a new item:');
+    if (newItem) {
+      setListItems([...listItems, newItem]);
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={addItem}>Add Item</button>
+      <List items={listItems} />
+    </div>
+  );
+};
+
+export default App;
