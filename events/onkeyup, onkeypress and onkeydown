@@ -1,0 +1,24 @@
+"use client"
+import React, { KeyboardEvent } from 'react';
+
+const Home: React.FC = () => {
+    const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+        // Access the pressed key using event.key
+        console.log(event.code);
+        if (event.code === 'Enter') {
+            alert('You clicked Enter');
+        }
+    };
+
+    return (
+        <div>
+            <input
+                type="text"
+                onKeyDown={handleKeyDown}
+                placeholder="Type something..."
+            />
+        </div>
+    );
+};
+
+export default Home;
