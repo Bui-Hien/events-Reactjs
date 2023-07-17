@@ -1,0 +1,54 @@
+"use client"
+import React, { useState } from "react";
+
+interface RadioState {
+    selectedOption: string;
+}
+
+export default function Home() {
+    const [radioState, setRadioState] = useState<RadioState>({
+        selectedOption: "option1", // Set the initial selected option here
+    });
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRadioState({ selectedOption: event.target.value });
+    };
+
+    return (
+        <div>
+            <label>
+                <input
+                    type="radio"
+                    name="options"
+                    value="option1"
+                    checked={radioState.selectedOption === "option1"}
+                    onChange={handleChange}
+                />
+                Option 1
+            </label>
+            <br />
+            <label>
+                <input
+                    type="radio"
+                    name="options"
+                    value="option2"
+                    checked={radioState.selectedOption === "option2"}
+                    onChange={handleChange}
+                />
+                Option 2
+            </label>
+            <br />
+            <label>
+                <input
+                    type="radio"
+                    name="options"
+                    value="option3"
+                    checked={radioState.selectedOption === "option3"}
+                    onChange={handleChange}
+                />
+                Option 3
+            </label>
+            <p>Selected Option: {radioState.selectedOption}</p>
+        </div>
+    );
+};
