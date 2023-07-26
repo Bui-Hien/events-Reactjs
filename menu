@@ -1,0 +1,56 @@
+interface MenuItem {
+  id: number;
+  label: string;
+  children: MenuItem[];
+}
+
+
+
+import React from 'react';
+
+interface MenuItemProps {
+  item: MenuItem;
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({ item }) => {
+  if (item.children.length > 0) {
+    return (
+      <li>
+        {item.label}
+        <ul>
+          {item.children.map((child) => (
+            <MenuItem key={child.id} item={child} />
+          ))}
+        </ul>
+      </li>
+    );
+  } else {
+    return <li>{item.label}</li>;
+  }
+};
+
+interface MultiLevelMenuProps {
+  data: MenuItem[];
+}
+
+const MultiLevelMenu: React.FC<MultiLevelMenuProps> = ({ data }) => {
+  return (
+    <ul>
+      {data.map((item) => (
+        <MenuItem key={item.id} item={item} />
+      ))}
+    </ul>
+  );
+};
+
+// Sử dụng trong thành phần cha
+const App: React.FC = () => {
+  return (
+    <div>
+      <h1>Menu Đa Cấp</h1>
+      <MultiLevelMenu data={menuData} />
+    </div>
+  );
+};
+
+export default App;
