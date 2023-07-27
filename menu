@@ -1,56 +1,115 @@
-interface MenuItem {
-  id: number;
-  label: string;
-  children: MenuItem[];
-}
+//type
+export type ChildItem = {
+    route: string; // Making 'route' property required
+    label: string;
+    children?: ChildItem[];
+};
 
 
 
-import React from 'react';
 
-interface MenuItemProps {
-  item: MenuItem;
-}
+//data
 
-const MenuItem: React.FC<MenuItemProps> = ({ item }) => {
-  if (item.children.length > 0) {
+import {ChildItem} from "@/types/propTypes";
+
+const navData: ChildItem[] = [
+    {
+        route: '/',
+        label: 'Menu 1',
+        children: [
+            { route: '/submenu1-1', label: 'Submenu 1.1', children: [] },
+            { route: '/submenu1-2', label: 'Submenu 1.2', children: [] },
+        ],
+    },
+    {
+        route: '/menu2',
+        label: 'Menu 2',
+        children: [
+            { route: '/submenu2-1', label: 'Submenu 2.1', children: [] },
+            { route: '/submenu2-2', label: 'Submenu 2.2', children: [] },
+        ],
+    },
+    // Add other items if needed
+];
+
+export default navData;
+
+
+
+
+
+//NavbarLink
+
+import React from "react";
+import {usePathname} from "next/navigation";
+import Link from "next/link";
+import {ChildItem} from "@/types/propTypes";
+
+
+export type Props = {
+    item: ChildItem;
+    classNameLi: string;
+    classNameUl: string;
+};
+const NavLink: React.FC<Props> = ({ item, classNameLi, classNameUl }) => {
+    const currentRoute = usePathname();
+    const hasChildren = item?.children && item.children.length > 0;
+
     return (
-      <li>
-        {item.label}
-        <ul>
-          {item.children.map((child) => (
-            <MenuItem key={child.id} item={child} />
-          ))}
-        </ul>
-      </li>
+        <li className={classNameLi}>
+            <Link href={item.route}>
+                <label className={currentRoute === item.route ? 'text-red-500' : ''}>
+                    {item.label}
+                </label>
+            </Link>
+            {hasChildren && (
+                <ul className={classNameUl}>
+                    {item.children!.map((child, index) => (
+                        <NavLink
+                            key={index}
+                            item={child}
+                            classNameLi={classNameLi}
+                            classNameUl={classNameUl}
+                        />
+                    ))}
+                </ul>
+            )}
+        </li>
     );
-  } else {
-    return <li>{item.label}</li>;
-  }
 };
 
-interface MultiLevelMenuProps {
-  data: MenuItem[];
-}
+export default NavLink;
 
-const MultiLevelMenu: React.FC<MultiLevelMenuProps> = ({ data }) => {
-  return (
-    <ul>
-      {data.map((item) => (
-        <MenuItem key={item.id} item={item} />
-      ))}
-    </ul>
-  );
+
+//Navbar
+
+"use client"
+import React from "react";
+import navData from "@/common";
+import NavLink from "@/components/Navbar/NavLink";
+const Navbar = () => {
+    const classNameLi = 'your-li-class'; // Replace with your actual li class name
+    const classNameUl = 'your-ul-class'; // Replace with your actual ul class name
+    return (
+        <main>
+            <nav>
+                <ul>
+                    {navData.map((item, index) => (
+                        <NavLink
+                            key={index}
+                            item={item}
+                            classNameLi={classNameLi}
+                            classNameUl={classNameUl}
+                        />
+                    ))}
+                </ul>
+            </nav>
+        </main>
+    );
 };
 
-// Sử dụng trong thành phần cha
-const App: React.FC = () => {
-  return (
-    <div>
-      <h1>Menu Đa Cấp</h1>
-      <MultiLevelMenu data={menuData} />
-    </div>
-  );
-};
+export default Navbar;
 
-export default App;
+
+
+
