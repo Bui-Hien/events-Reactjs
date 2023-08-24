@@ -1,0 +1,43 @@
+import { useEffect } from "react";
+
+export default function useOutsideClose(ref: any, onClose: () => void) {
+    useEffect(() => {
+        function handleClickOutside(event: any) {
+            if (ref.current && !ref.current.contains(event.target)) {
+                onClose();
+            }
+        }
+
+        // Bind the event listener
+        document.addEventListener("click", handleClickOutside);
+        return () => {
+            // Unbind the event listener on clean up
+            document.removeEventListener("click", handleClickOutside);
+        };
+    }, [onClose, ref]);
+}
+
+
+
+import React, { useRef, useState } from 'react';
+import useOutsideClick from './useOutsideClick'; // Tên hook đã được đổi
+
+function App() {
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef(null);
+
+  useOutsideClick(containerRef, () => setIsVisible(false)); // Sử dụng hook đã được đổi tên
+
+  return (
+    <div className="app">
+      <div className="container" ref={containerRef}>
+        <button type="button" onClick={() => setIsVisible(!isVisible)}>
+          <span>Toggle Modal</span>
+        </button>
+        {isVisible && <div className="modal">MODAL</div>}
+      </div>
+    </div>
+  );
+}
+
+export default App;
