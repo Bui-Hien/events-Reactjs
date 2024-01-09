@@ -1,0 +1,34 @@
+import React, { useState, useEffect } from 'react';
+
+const YourComponent = () => {
+  const [onTop, setOnTop] = useState(true);
+
+  const headerClass = () => {
+    if (window.pageYOffset === 0) {
+      setOnTop(true);
+    } else {
+      setOnTop(false);
+    }
+  };
+
+  useEffect(() => {
+    headerClass(); // Call initially
+
+    window.onscroll = () => {
+      headerClass(); // Update on scroll
+    };
+
+    return () => {
+      window.onscroll = null; // Cleanup on component unmount
+    };
+  }, []); // Empty dependency array ensures it runs once on mount
+
+  console.log("onTop", onTop); // This will log the updated value of onTop
+
+  // Rest of your component JSX
+  return (
+    // Your JSX here
+  );
+};
+
+export default YourComponent;
